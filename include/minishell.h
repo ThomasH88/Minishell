@@ -6,14 +6,14 @@
 /*   By: tholzheu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 10:00:03 by tholzheu          #+#    #+#             */
-/*   Updated: 2018/10/29 19:16:25 by tholzheu         ###   ########.fr       */
+/*   Updated: 2019/06/15 17:22:49 by tholzheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/types.h>

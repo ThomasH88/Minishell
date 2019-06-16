@@ -6,46 +6,54 @@
 #    By: tholzheu <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/10 16:42:11 by tholzheu          #+#    #+#              #
-#    Updated: 2018/10/28 15:50:38 by tholzheu         ###   ########.fr        #
+#    Updated: 2019/06/15 17:22:29 by tholzheu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-HEADER = minishell.h
+IDIR = include
+
+HEADER = $(addprefix $(IDIR)/, minishell.h)
+
+CC = gcc
 
 LIB1 = libft/libft.a
 
 LIB2 = libft/b_printf/libftprintf.a
 
-FLAGS = -Wall -Werror -Wextra -o
+FLAGS = -Wall -Werror -Wextra -I$(IDIR)
 
-SRCS = minishell.c \
-	   run_command.c \
-	   side_funct.c \
-	   string.c \
-	   free.c	\
-	   builtin_cmds.c \
-	   included_cmds.c \
-	   env_cmds.c \
-	   cmds_helper.c \
-	   get_env_var.c \
+ODIR = obj
 
-SRCO = $(SRCS:.c=.o)
+SDIR = src
 
-$(NAME):
+OBJS = $(addprefix $(ODIR)/, minishell.o \
+	   run_command.o \
+	   side_funct.o \
+	   string.o \
+	   free.o	\
+	   builtin_cmds.o \
+	   included_cmds.o \
+	   env_cmds.o \
+	   cmds_helper.o \
+	   get_env_var.o) 
+
+$(ODIR)/%.o: $(SDIR)/%.c $(HEADER)
+	@mkdir -p obj
+	$(CC) -c -o $@ $< $(FLAGS)
+
+$(NAME): $(OBJS) $(LIB1) $(LIB2)
+	$(CC) -o $@ $^ $(FLAGS)
+
+$(LIB1):
 	make -C libft/
-	gcc $(FLAGS) $(NAME) $(SRCS) $(LIB1) $(LIB2) -I=$(HEADER)
 
 all: $(NAME)
 
-san: fclean
-	make -C libft/
-	gcc -fsanitize=address -g $(FLAGS) $(NAME) $(SRCS) $(LIB1) $(LIB2) -I=$(HEADER)
-
 clean:
 	make clean -C libft/
-	/bin/rm -f $(SRCO)
+	/bin/rm -rf obj $(SRCO)
 
 fclean: clean
 	make fclean -C libft/
@@ -53,9 +61,4 @@ fclean: clean
 
 re: fclean all
 
-git: fclean
-	git add .
-	git reset HEAD *main*
-	git status
-	git commit -m "update"
-	git push
+.PHONY: all clean fclean re
